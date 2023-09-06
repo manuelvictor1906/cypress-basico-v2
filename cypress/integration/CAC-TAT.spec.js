@@ -163,9 +163,72 @@ describe('Central de Atendimento ao Cliente TAT', function() {
  
     })
     
+    it('Validar o uso do clock e tick', function() {
+        cy.clock()
+        cy.comandoCustomizadoParaOFormulario()
+        cy.get('.success').should('be.visible')
+        cy.tick(3000)
+        cy.get('.success').should('not.be.visible')
+    })
 
+    //Rodar o mesmo teste n vezes. = cypress._.times(x, function{})
+    Cypress._.times(3,function(){
+        
+        it('Validar o uso do clock e tick', function() {
+            cy.clock()
+            cy.comandoCustomizadoParaOFormulario()
+            cy.get('.success').should('be.visible')
+            cy.tick(3000)
+            cy.get('.success').should('not.be.visible')
+        })
 
+    })
 
+    it('exibe e esconde as mensagens de sucesso e erro usando o .invoke', function() {
+       cy.get('.success')
+            .should('not.be.visible')
+            .invoke('show') //Mostra todas as mensagens escondidas
+            .should('be.visible').and('contain',"Mensagem enviada com sucesso.")
+            .invoke('hide') //Esconde as mensagens
+            .should('not.be.visible')
+        cy.get('.error')
+            .should('not.be.visible')
+            .invoke('show')
+            .should('be.visible').and('contain',"Valide os campos obrigatórios!")
+            .invoke('hide') //Esconde as mensagens
+            .should('not.be.visible')
+    })
+
+    it('Preencher a area de texto usando o repeat', function() {
+        
+        const textoLongo = Cypress._.repeat('Testando Cypress', 10)
+
+        cy.get('#open-text-area').type(textoLongo)
+            .should('have.value',textoLongo)
+            
+     })
+
+     it.only('Encontre o gato na aplicaçã', function() {
+
+        cy.get('#cat')
+            .invoke('show')
+            .should('be.visible')
+            
+     })
+            
+     it('Requisição GET', function() {
+       
+        const URL = 'https://cac-tat.s3.eu-central-1.amazonaws.com/index.html'
+        cy.request(URL)
+            .should(function(response){
+                console.log(response)
+                expect(response.status).to.equal(200)
+                expect(response.statusText).to.equal("OK")
+                expect(response.body).to.include("CAC TAT")
+
+            })
+            
+     })
 
     
 })
