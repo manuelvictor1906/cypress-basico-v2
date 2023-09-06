@@ -1,0 +1,17 @@
+#COMO CRIAR UM PIPELINE COM INTEGRAÇÂO CONTINUA
+
+#nome do pipeline:
+name: End-to-end tests 🧪
+#Disparado sempre que for enviado um push
+on: [push]
+jobs:
+  #comando que roda os testes do cypress: "cypress-run"
+  cypress-run:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
